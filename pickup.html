@@ -1,0 +1,609 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>AIS LA Tech</title>
+<link rel="stylesheet" type="text/css" href="csshorizontalmenu.css" />
+
+<script type="text/javascript" src="csshorizontalmenu.js">
+
+<script language="JavaScript1.1">
+<!--
+
+var slideimages=new Array()
+var slidelinks=new Array()
+function slideshowimages(){
+for (i=0;i<slideshowimages.arguments.length;i++){
+slideimages[i]=new Image()
+slideimages[i].src=slideshowimages.arguments[i]
+}
+}
+
+function slideshowlinks(){
+for (i=0;i<slideshowlinks.arguments.length;i++)
+slidelinks[i]=slideshowlinks.arguments[i]
+}
+
+function gotoshow(){
+if (!window.winslide||winslide.closed)
+winslide=window.open(slidelinks[whichlink])
+else
+winslide.location=slidelinks[whichlink]
+winslide.focus()
+}
+
+//-->
+</script>
+
+
+<!-- Script to check whether the mandatory fields on the form are all  filled -->
+<!-- Author: Vinay Mannava; Date: 30 July 2002; Author: Kiran Chakravarthula; Date: 19 October 2005; Modified: 21 July 2010 -->
+<!-- Function CheckEmail modified from WWW.SmartWebby.Com -->
+<SCRIPT language=JavaScript>
+function CheckEmail(str) 
+{
+	var at="@";
+	var dot=".";
+	var lat=str.indexOf(at);
+	var lstr=str.length;
+	var ldot=str.indexOf(dot);
+	if ((str.indexOf(at)==-1 || str.indexOf(at)==0 || str.indexOf(at)==lstr) || (str.indexOf(dot)==-1 || str.indexOf(dot)==0 || str.indexOf(dot)==lstr) || (str.indexOf(" ")!=-1))
+	{
+		return false;
+	}
+	 if ((str.indexOf(at,(lat+1))!=-1) || (str.indexOf(dot,(lat+2))==-1))
+	 {
+	 	return false;
+	 }
+	 if ((str.substring(lat-1,lat)==dot) || (str.substring(lat+1,lat+2)==dot))
+	 {
+	 	return false;
+	 }
+	 if (str.substr(lstr-1, 1) == dot)
+	 {
+	 	return false;
+	 }
+	
+	 return true;					
+}
+
+function CheckAirline(str) 
+{
+	var let1 = str.charAt(0);
+	var let2 = str.charAt(1);
+	
+	if ((str == null) || (str == ""))
+	{
+		alert("Airline name-code not specified");
+		return false;
+	}
+	else if (str.length < 2)
+	{
+		alert("Airline name incomplete");
+		return false;
+	}
+	if (!(((let1 >= "A" && let1 <= "Z") || (let1 >= "a" && let1 <= "z")) && ((let2 >= "A" && let2 <= "Z") || (let2 >= "a" && let2 <="z"))))
+	{
+		alert("Airline name-code should be two alphabets");
+		return false;
+	}
+	
+	return true;
+}
+	
+
+function CheckFlightNum(str)
+{
+	var let1 = str.charAt(0);
+	var let2 = str.charAt(1);
+	var let3 = str.charAt(2);
+	var let4 = str.charAt(3);
+	
+	if ((str == null) || (str == ""))
+	{
+		alert("Flight number not specified. Please enter the 4-digit flight number");
+		return false;
+	}
+	if (str.length < 4)
+	{
+		alert("Flight number incomplete. Please enter the 4-digit flight number. (Use zeroes in the front to make it 4-digit.)");
+		return false;
+	}
+	
+	if (!((let1 >= "0" && let1 <= "9") && (let2 >= "0" && let2 <= "9") && (let3 >= "0" && let3 <= "9") && (let4 >= "0" && let4 <= "9")))
+	{
+		alert("Flight number has invalid characters. Please enter the 4-digit flight number");
+		return false;
+	}
+
+	return true;
+}
+
+function CheckName(str)
+{
+	if ((str == "") || (str == null) || (str.length < 2))
+	{
+		return false;
+	}
+	else 
+	{
+		return true;
+	}
+}
+
+function CheckRadio(frmName, rbGroupName) 
+{ 
+	var radios = document[frmName].elements[rbGroupName]; 
+	for (var i=0; i <radios.length; i++) { 
+		if (radios[i].checked) 
+		{
+			return true; 
+		}
+ 	} 
+	return false; 
+}
+
+function CheckForm()
+{
+   	var airport_set = false;
+   	var date_set = false;
+   	var time_set = false;
+
+   	var AISForm = document.pickreq;
+   	var fname = AISForm.FirstName.value;
+   	var lname = AISForm.LastName.value;
+   	var email = AISForm.Email.value;
+   	var airline = AISForm.FlightName.value;
+   	var flight = AISForm.FlightNum.value;
+   	if (AISForm.AirportName[0].checked == true)
+   	{
+   		var airport_val = AISForm.AirportName[0].value;
+   		airport_set = true;
+   	}
+   	else if (AISForm.AirportName[1].checked == true)
+   	{
+   		var airport_val = AISForm.AirportName[1].value;
+   		airport_set = true;
+   	}
+   	else if ((AISForm.AirportName[0].checked == false) && (AISForm.AirportName[1].checked == false))
+   	{
+   		airport_set = false;
+   	}
+
+  	var mmm = document.getElementById("ArrMonth");
+	var dd = document.getElementById("ArrDate");
+  	var yyyy = document.getElementById("ArrYear");
+
+	var hh = document.getElementById("TimeHour");
+  	var mm = document.getElementById("TimeMin");
+  	var ampm = document.getElementById("AMPM");
+	
+	if (navigator.userAgent.toLowerCase().indexOf("msie") != -1)
+	{
+  		var mmm_val = mmm.options[mmm.selectedIndex].text;
+		var dd_val = dd.options[dd.selectedIndex].text;
+		var yyyy_val = yyyy.options[yyyy.selectedIndex].text;
+		var hh_val = dd.options[hh.selectedIndex].text;
+		var mm_val = mm.options[mm.selectedIndex].text;
+		var ampm_val = ampm.options[ampm.selectedIndex].text;
+
+		if (!(mmm_val == "" || mmm_val == null || dd_val == "" || dd_val == null || yyyy_val == "" || yyyy_val == null))
+		{
+			date_set = true;
+		}
+
+		if (!(hh_val == "" || hh_val == null || mm_val == "" || mm_val == null || ampm_val == "" || ampm_val == null))
+		{
+			time_set = true;
+		}
+	}
+	
+	else if (navigator.userAgent.toLowerCase().indexOf("opera") != -1)
+	{
+		var mmm_val = mmm.options[mmm.selectedIndex].value;
+	 	var dd_val = dd.options[dd.selectedIndex].value;
+		var yyyy_val = yyyy.options[yyyy.selectedIndex].value;
+		var hh_val = hh.options[hh.selectedIndex].value;
+	 	var mm_val = mm.options[mm.selectedIndex].value;
+		var ampm_val = ampm.options[ampm.selectedIndex].value;
+
+		if (!(mmm_val == "" || mmm_val == null || dd_val == "" || dd_val == null || yyyy_val == "" || yyyy_val == null))
+		{
+			date_set = true;
+		}
+		if (!(hh_val == "" || hh_val == null || mm_val == "" || mm_val == null || ampm_val == "" || ampm_val == null))
+		{
+			time_set = true;
+		}
+	}
+	
+	else if (navigator.userAgent.toLowerCase().indexOf("mozilla") != -1)
+	{
+	  	var mmm = AISForm.ArrMonth;
+		var dd = AISForm.ArrDate;
+ 	 	var yyyy = AISForm.ArrYear;
+
+		var hh = AISForm.TimeHour;
+  		var mm = AISForm.TimeMin;
+  		var ampm = AISForm.AMPM;
+
+		var mmm_val = mmm.options[mmm.selectedIndex].value;
+	 	var dd_val = dd.options[dd.selectedIndex].value;
+		var yyyy_val = yyyy.options[yyyy.selectedIndex].value;
+		var hh_val = hh.options[hh.selectedIndex].value;
+	 	var mm_val = mm.options[mm.selectedIndex].value;
+		var ampm_val = ampm.options[ampm.selectedIndex].value;
+
+		if (!(mmm_val == "" || mmm_val == null || dd_val == "" || dd_val == null || yyyy_val == "" || yyyy_val == null))
+		{
+			date_set = true;
+		}
+		if (hh_val == "" || hh_val == null || mm_val == "" || mm_val == null || ampm_val == "" || ampm_val == null)
+		{
+			time_set = false;
+		}
+		else 
+		{
+			time_set = true;
+		}	
+	}
+		
+	if ((CheckName(fname) == false) || (CheckName(lname) == false) || (CheckEmail(email) == false) || (CheckAirline(airline) == false) || (CheckFlightNum(flight) == false) ||
+		airport_set == false || date_set == false || time_set == false)
+   	{      
+      if (CheckName(fname) == false)
+      {
+         AISForm.FirstName.focus();
+		alert("Please provide the complete first name");
+		return false;
+      }
+      if (CheckName(lname) == false)
+      {
+        AISForm.LastName.focus();
+		alert("Please provide the complete last name");
+		return false;
+      }
+      if (CheckEmail(email) == false)
+      {
+        AISForm.Email.focus();
+		alert("Please provide a valid e-mail address");
+		return false;		
+      }
+   	 if (airport_set == false)
+   	 {
+  		alert("Please specify the destination airport. (If you are traveling to Ruston directly by Greyhound bus, select Monroe and write details in Comments.)");
+		return false;
+	 }
+      if (CheckAirline(airline) == false)
+   	{
+     	AISForm.FlightName.focus();
+		return false;
+   	}
+   	if (CheckFlightNum(flight) == false)
+   	{
+     	AISForm.FlightNum.focus();
+		return false;		
+   	}
+	if (date_set == false)
+	{
+		alert("Please specify the exact date of arrival");
+  		AISForm.ArrMonth.focus();
+  		return false;	
+	}
+	if (time_set == false)
+	{
+		alert("Please specify the exact time of arrival");
+  		AISForm.TimeHour.focus();
+		return false;	
+	}
+   }
+	else if ((CheckName(fname) == true) && (CheckName(lname) == true) && (CheckEmail(email) == true) && (CheckAirline(airline) == true) && (CheckFlightNum(flight) == true) 
+  			&& date_set == true && time_set == true && airport_set == true)
+  	{  	
+		return true;	  	
+   	}
+}
+</SCRIPT>
+
+
+<style type="text/css">
+a {
+text-decoration:none;
+}
+a:link {
+COLOR:#333;
+}
+a:visited {
+COLOR:#333;
+}
+a:hover {
+COLOR:#FEAD06;
+cursor:pointer;
+}
+a:active {
+COLOR:#090;
+}
+
+#navbar
+{
+	font-family:Arial, Helvetica, sans-serif;
+	text-align:center;
+	color:#777777;
+	font-weight:bold;
+	
+	
+	
+	
+	
+	
+}
+#members1
+{
+	font-family:Verdana, Geneva, sans-serif; font-size:14px; color:#333; font-weight:500;
+}
+#para
+{
+	font-family:Verdana, Geneva, sans-serif; font-size:13px; color:#333;
+}
+#table
+{
+	font-family:Verdana, Geneva, sans-serif; font-size:13px; color:#333;
+	text-align:right;
+}
+
+
+</style>
+<script language="javascript">
+
+
+
+</script>
+</head>
+
+<body style="background-image:url(zapbody.jpg); background-repeat:repeat-x;" >
+<table cellspacing="0" align="center" width="90">
+<tr><td></td><td>
+<br/>
+</td><td></td></tr>
+<tr><td></td><td><table cellspacing="0" width="948" height="374" background="aisbanner.jpg"><tr><td width="554"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<table width="440" height="40" align="left" id="navbar">
+<tr><td width="16">&nbsp;&nbsp;&nbsp;&nbsp;</td><td width="65" id="navbar"><a href="index.html">Home</a></td><td width="100" id="navbar"><a href="committee.html">Committee</a></td><td width="73" id="navbar"><a href="history.html">History</a></td><td width="87" id="navbar"><a href="construction.html">Aspirants</a></td><td width="60" id="navbar"><a href="construction.html">Events</a></td></tr>
+
+
+</table>
+
+</td><td width="356">
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<div align="right">
+<iframe  src="http://www.facebook.com/plugins/like.php?href=http://www.facebook.com/AssociationOfIndianStudentsAtLouisianaTech"
+        scrolling="no" frameborder="0"
+        style="border:none; width:350px; height:150px"></iframe></div>
+</td><td width="22">&nbsp;</td></tr></table>
+</td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td></td><td>
+
+
+</td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td></td><td>
+<table width="948"><tr>
+<td width="300"><table width="300" height="292" background="quick.jpg">
+  <tr>
+    <td width="71" height="38">&nbsp;</td>
+    <td width="217"></td>
+  </tr>
+  <tr>
+    <td height="44" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img  align="absbottom" height="25"  src="pick.jpg"/></td>
+    <td id="navbar"><a href="pickup.html">Request Pickup</a></td>
+  </tr>
+  <tr>
+    <td height="41">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img  align="absbottom"   src="31.jpg"/></td>
+    <td id="navbar"><a href="http://www.latech.edu/graduate_school/admissions/internationaldeadlines.shtml">Deadlines</a></td>
+  </tr>
+  <tr>
+    <td height="42">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img  align="absbottom"   src="book.jpg"/></td>
+    <td id="navbar"><a href="http://www.latech.edu/tech/orgs/ais/aspirants/guidebook.pdf">Guide Book</a></td>
+  </tr>
+  <tr>
+    <td height="42">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img  align="absbottom"   src="phone.jpg"/></td>
+    <td id="navbar"><a href="contact.html">Contact Us</a></td>
+  </tr>
+  <tr>
+    <td height="42">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img  align="absbottom"   src="faq.jpg"/></td>
+    <td id="navbar"><a href="faq.html">F.A.Q</a></td>
+  </tr>
+  <tr>
+    <td height="42">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img  align="absbottom"   src="13.jpg"/></td>
+    <td id="navbar">13th Committee of AIS welcomes you. </td>
+  </tr>
+  <tr>
+    <td><br/></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><br/></td>
+    <td></td>
+  </tr>
+</table><br/><br/><br/><br/><br/><br/></td>
+<td align="justify" width="635">
+<div align="left" style="font-family:Verdana, Geneva, sans-serif; font-size:16px; font-weight:500; color:#777777;">Request Pickup </div><br/><font size="2" face="Arial" color="#000066">(Form fields marked <font color="red">*</font> are mandatory)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">JavaScript must be enabled </font><br/>
+<font color="red">*</font>If you cannot use the form for any reason, submit your pickup request by e-mail to <strong>ais@latech.edu</strong> <br/>with all the details requested in the form. </font><br>
+<FORM target="_blank" ACTION="http://www.latech.edu/cgi-bin/formmail.pl" METHOD="post" name="pickreq" AUTOCOMPLETE="on" onSubmit="return CheckForm()">
+<input type=hidden name="recipient" value="ais@latech.edu">
+<input type=hidden name="subject" value="Pickup Request Form">
+
+<font size="2" face="Arial">
+<table id="para" width=565 border="0" cellspacing="2" cellpadding="1"  align="center">
+       <tr>
+           <td width=50% height="1" >Title:
+           </td>
+           <td width=50% height="1">
+               <select size="1" name="Title">
+                       <option>  </option>
+                       <option>Mr.</option>
+                       <option>Ms.</option>
+                       <option>Dr.</option>
+                       <option>Mrs.</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td width=50% height="1">
+                First Name<font color="red">*</font>:
+            </td>
+            <td width=50% height="1">
+                <INPUT NAME="FirstName" SIZE=40 MAXLENGTH="40"></td>
+         </tr>
+         <tr>
+             <td height="1" width=50%>
+                 Middle Name
+             </td>
+             <td height="1" width=50%>
+                 <INPUT NAME="MidName" SIZE=40 MAXLENGTH="40"></td>
+          </tr>
+          <tr>
+              <td height="1" width=50%>
+                Last Name<font color="red">*</font>:
+              </td>
+              <td height="1" width=50%>
+                <INPUT NAME="LastName" SIZE=40 MAXLENGTH="40"></td>
+          </tr>
+          <tr>
+              <td height="21" width=50%>
+                  Gender
+              </td>
+              <td height="21" width=50%>
+                  <INPUT TYPE="radio" NAME="Gender" VALUE="Male"><font size="2" style="font-size:70%">Male</font>
+                  <INPUT TYPE="radio" NAME="Gender" VALUE="Female"><font size="2" style="font-size:70%">Female</font></td>
+           </tr>
+           <tr>
+                <td height="1" width=50%>
+                 E-mail<font color="red">*</font>:
+                </td>
+                <td height="1" width=50%>
+                    <INPUT NAME="Email" SIZE=40 MAXLENGTH="60"></td>
+           </tr>
+           <tr>
+              <td height="21" width=50%>
+                  Destination Airport<font color="red">*</font>:
+              </td>
+              <td height="21" width=50%>
+                  <INPUT TYPE="radio" NAME="AirportName" VALUE="MLU"><font size="2" style="font-size:70%">Monroe (MLU)</font>
+                  <INPUT TYPE="radio" NAME="AirportName" VALUE="SHV"><font size="2" style="font-size:70%">Shreveport (SHV)</font>
+              </td>
+           </tr>
+		   <tr>
+<td height="1" width=50%>
+  Flight Number<font color="#FF0000">*</font>:</td>
+<td height="1" width=50%>
+<INPUT NAME="FlightName" SIZE=2 MAXLENGTH="2"><INPUT NAME="FlightNum" SIZE=4 MAXLENGTH="4"></td>
+</tr>
+<tr>
+<td height="1" width=50%>
+  Date of Arrival<font color="#FF0000">*</font>:</td>
+<td height="1" width=50%>
+<select size="1" name="ArrMonth">
+  <font size="2" style="font-size:70%">
+  <option value=""></option>
+  <option value="Jan">January</option>
+  <option value="Feb">February</option>
+  <option value="Mar">March</option>
+  <option value="Apr">April</option>
+  <option value="May">May</option>
+  <option value="Jun">June</option>
+  <option value="Jul">July</option>
+  <option value="Aug">August</option>  
+  <option value="Sep">September</option>
+  <option value="Oct">October</option>
+  <option value="Nov">November</option>
+  <option value="Dec">December</option>
+  </font>
+  </select>
+  <select size="1" name="ArrDate">
+  <font size="2" style="font-size:70%">
+  <option value=""></option>
+  <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option>
+  <option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option>
+  <option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option>
+  <option>28</option><option>29</option><option>30</option><option>31</option></font>
+ </select>
+ <select size="1" name="ArrYear">
+  <option value=""></option>
+  <option>2011</option><option>2012</option>
+ </select></td>
+</tr>
+<tr>
+<td height="1" width=50%>
+  Time of Arrival<font color="red">*</font>:</td>
+<td height="1" width=50%>
+  <select size="1" name="TimeHour">
+   <font size="2" style="font-size:70%">
+   <option></option>
+   <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option>
+   <option>09</option><option>10</option><option>11</option><option>12</option></font>
+  </select><font size="2" style="font-size:70%">:</font><select size="1" name="TimeMin">
+   <font size="2" style="font-size:70%">
+   <option></option>
+   <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option>
+   <option>09</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option>
+   <option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option>
+   <option>27</option><option>28</option><option>29</option><option>30</option><option>31</option><option>32</option><option>33</option><option>34</option><option>35</option>
+   <option>36</option><option>37</option><option>38</option><option>39</option><option>40</option><option>41</option><option>42</option><option>43</option><option>44</option>
+   <option>45</option><option>46</option><option>47</option><option>48</option><option>49</option><option>50</option><option>51</option><option>52</option><option>53</option>
+   <option>54</option><option>55</option><option>56</option><option>57</option><option>58</option><option>59</option></font>
+  </select>
+  <select size="1" name="AMPM">
+   <font size="2" style="font-size:70%">
+   <option></option>
+   <option>a.m.</option>
+   <option>p.m.</option></font>
+  </select></td>
+</tr>
+<tr>
+<td height="1" width=50%>
+  Contact Phone in U.S.A (if any):
+</td>
+<td height="1" width=50%>  
+<INPUT NAME="Phone" SIZE=15 MAXLENGTH="15"></td>
+</tr>
+<tr>
+<td height="1" width=50%>
+  Additional Comments:</td>
+<td height="1" width=50%>
+  <TEXTAREA cols=39 name=txtComments rows=5 wrap=ON style="font-family: Verdana; font-size: 10pt"></TEXTAREA></td>
+</table>
+<br>
+<div align="center">
+<input type="submit" value="Request Pickup" name="Submit" style="font-family: Verdana; font-size: 10pt" onsubmit="return CheckForm()"></div><div id="para" align="center" >Check for confirmation opened in a new window</div>
+</form>
+</p>
+</td></tr></table>
+
+
+
+</td><td width="13">&nbsp;</td></tr>
+</td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td></td><td height="92" background="footer.jpg">
+<center style="font-family:Tahoma, Geneva, sans-serif;font-size:11px;color:#666">
+    © 2012 Association of Indian Students, LA Tech, Ruston, 71270.
+    </center>
+   <center style="font-family:Tahoma, Geneva, sans-serif;font-size:11px;color:#666">
+    Designed  by Harithan Reddy Velagala.</center> 
+
+</td><td></td></tr>
+
+
+
+
+
+
+
+
+</table>
+
+</body>
+</html>
